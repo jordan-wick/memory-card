@@ -1,31 +1,49 @@
 import { useState, useEffect } from 'react'
 import getCharacters from './components/GetCharacters'
-import Character from './components/Character';
 import './App.css'
+import CharactersList from './components/CharactersList';
 
 function App() {
-  const [charactersData, setcharactersData] = useState([]);
+  const [charactersData, setCharactersData] = useState([]);
+  const [movie, setMovie] = useState('');
+  const [difficulty, setDifficulty] = useState('easy');
 
   useEffect(() => {
-    getCharacters().then((data) => {
-      setcharactersData(data);
+    getCharacters(movie).then((data) => {
+      setCharactersData(data);
     });
-  }, []);
+  }, [movie]);
 
   return (
     <>
-      <ul className="characters-list">
-        {charactersData.length > 0
-        ? charactersData.map((index) => (
-          // only characters in big hero six &&
-          <Character
-            key={index._id}
-            name={index.name}
-            imageUrl={index.imageUrl}
-          />
-        ))
-        : <p>No characters available</p>}
-      </ul>
+      <form className="settings">
+        <select
+          type="text"
+          name="movie"
+          id="movie"
+          onChange={(e) => {setMovie(e.target.value)}}
+        >
+          <option value="">--Pick a movie--</option>
+          <option value="tangled">Tangled</option>
+          <option value="frozen">Frozen</option>
+          <option value="moana">Moana</option>
+          <option value="wreck-it-ralph">Wreck-It Ralph</option>
+          <option value="zootopia">Zootopia</option>
+          <option value="big-hero-6">Big Hero 6</option>
+          <option value="Encanto">Encanto</option>
+        </select>
+        <select
+          type="text"
+          name="difficulty"
+          id="difficulty"
+          onChange={(e) => setDifficulty(e.target.value)}
+        >
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </form>
+      <CharactersList charactersData={charactersData} difficulty={difficulty} />
     </>
   )
 }

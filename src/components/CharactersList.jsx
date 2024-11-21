@@ -10,24 +10,10 @@ export default function CharactersList({ charactersData, difficulty }) {
     difficultySize = 14;
   }
 
-  const copiedData = charactersData;
 
-  const randomCharacters = [];
-  const randomIndices = new Set();
-  for (let i = 0; i < difficultySize; i++) {
-    const randomIndex = Math.floor(Math.random() * copiedData.length);
-    const randomCharacter = copiedData[randomIndex];
-    if (!randomIndices.has(randomIndex)) {
-      randomCharacters.push(randomCharacter);
-      randomIndices.add(randomIndex);
-    } else {
-      i--;
-    }
-  }
-  
   return (
     <ul className="characters-list">
-      {randomCharacters.map((index) => (
+      {charactersData.map((index) => (
           <Character
             key={index._id}
             name={index.name}

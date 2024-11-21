@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import getCharacters from './components/GetCharacters'
+import GetCharacter from './components/GetCharacter'
 import './App.css'
 import CharactersList from './components/CharactersList';
 

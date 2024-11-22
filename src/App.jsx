@@ -1,49 +1,54 @@
-import { useState, useEffect } from 'react'
-import GetCharacter from './components/GetCharacter'
+import { useState } from 'react'
 import './App.css'
 import CharactersList from './components/CharactersList';
+import useCharacters from './components/GetCharacter';
 
 function App() {
-  const [charactersData, setCharactersData] = useState([]);
-  const [movie, setMovie] = useState('');
-  const [difficulty, setDifficulty] = useState('easy');
+  const [difficulty, setDifficulty] = useState('6');
+  const [loading, setLoading] = useState(false);
+  const [charactersRendered, setCharactersRendered] = useState(false);
+  const [selectedCards, setSelectedCards] = useState(new Set());
+  const [score, setScore] = useState(0);
 
-  useEffect(() => {
-    getCharacters(movie).then((data) => {
-      setCharactersData(data);
-    });
-  }, [movie]);
+  const { characters, setCharacters, getRandomCharacters, shuffleCharacters } = useCharacters();
+
+
+
+  const initializeCharacters = async (amount) => {
+    setLoading(true);
+    const randomCharacters = await getRandomCharacters(amount);
+    setCharacters(randomCharacters);
+    setCharactersRendered(true);
+  }
+  if (charactersRendered === false) initializeCharacters(difficulty);
+
+  function handleCardClick(e) {
+    const selectedCard = e.target.id;
+    if (selectedCards.has(selectedCard)) {
+      setScore(0);
+    } else {
+      setScore(score + 1);
+      selectedCards.add(selectedCard);
+    }
+
+  }
+
 
   return (
     <>
       <form className="settings">
         <select
           type="text"
-          name="movie"
-          id="movie"
-          onChange={(e) => {setMovie(e.target.value)}}
-        >
-          <option value="">--Pick a movie--</option>
-          <option value="tangled">Tangled</option>
-          <option value="frozen">Frozen</option>
-          <option value="moana">Moana</option>
-          <option value="wreck-it-ralph">Wreck-It Ralph</option>
-          <option value="zootopia">Zootopia</option>
-          <option value="big-hero-6">Big Hero 6</option>
-          <option value="Encanto">Encanto</option>
-        </select>
-        <select
-          type="text"
           name="difficulty"
           id="difficulty"
           onChange={(e) => setDifficulty(e.target.value)}
         >
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
+          <option value="6">Easy</option>
+          <option value="10">Medium</option>
+          <option value="14">Hard</option>
         </select>
       </form>
-      <CharactersList charactersData={charactersData} difficulty={difficulty} />
+      <CharactersList characters={characters} handleClick={handleCardClick} />
     </>
   )
 }

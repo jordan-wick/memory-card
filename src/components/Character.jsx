@@ -1,7 +1,7 @@
-export default function Character({ name, imageUrl }) {
+export default function Character({ name, imageUrl, id }) {
 
   return (
-    <li>
+    <li className="card" id={id}>
       <p>{name}</p>
       <img
         src={imageUrl}

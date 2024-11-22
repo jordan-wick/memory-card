@@ -4,12 +4,13 @@ export default function useCharacters() {
   const [characters, setCharacters] = useState([]);
   const POSSIBLE_CHARACTERS = 7438;
 
-  const getCharacter = async (id) => {
+  const getCharacter = async ({ id }) => {
     const response = await fetch(`https://api.disneyapi.dev/character/${id}`, {
       mode: 'cors',
     });
-    const { name, imageUrl } = await response.data.json();
-    return { name, imageUrl };
+    const result = await response.json();
+    const { name, imageUrl } = result.data;
+    return { name, imageUrl, id };
   }
 
   const getRandomCharacters = async (amount) => {
@@ -19,7 +20,7 @@ export default function useCharacters() {
       const randomId = Math.floor(Math.random() * POSSIBLE_CHARACTERS) + 1; // Random number between 1 and POSSIBLE_CHARACTERS
       const isDuplicateId = charactersForDisplay.find(({ id }) => id === randomId);
       if (isDuplicateId) attempts++;
-      else charactersForDisplay.push(randomId);
+      else charactersForDisplay.push({id: randomId});
     }
 
     return await Promise.all(charactersForDisplay.map(getCharacter));

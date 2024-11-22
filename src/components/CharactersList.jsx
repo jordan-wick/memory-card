@@ -1,23 +1,16 @@
 import Character from "./Character"
 
-export default function CharactersList({ charactersData, difficulty }) {
-  let difficultySize;
-  if (difficulty === 'easy') {
-    difficultySize = 6;
-  } else if (difficulty === 'medium') {
-    difficultySize = 10;
-  } else if (difficulty === 'hard') {
-    difficultySize = 14;
-  }
-
+export default function CharactersList({ characters, handleClick }) {
 
   return (
     <ul className="characters-list">
-      {charactersData.map((index) => (
+      {characters.map((character) => (
           <Character
-            key={index._id}
-            name={index.name}
-            imageUrl={index.imageUrl}
+            key={character.id}
+            name={character.name}
+            imageUrl={character.imageUrl}
+            id={character.id}
+            onClick={handleClick}
           />
         ))
       }

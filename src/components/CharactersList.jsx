@@ -3,7 +3,7 @@ import Character from "./Character"
 export default function CharactersList({ characters, handleClick }) {
 
   return (
-    <ul className="characters-list">
+    <div className="characters">
       {characters.map((character) => (
           <Character
             key={character.id}
@@ -14,6 +14,6 @@ export default function CharactersList({ characters, handleClick }) {
           />
         ))
       }
-    </ul>
+    </div>
   )
 }

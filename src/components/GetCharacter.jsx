@@ -5,6 +5,7 @@ export default function useCharacters() {
   const POSSIBLE_CHARACTERS = 7438;
 
   const getCharacter = async ({ id }) => {
+    console.log('Calling API...')
     const response = await fetch(`https://api.disneyapi.dev/character/${id}`, {
       mode: 'cors',
     });

@@ -1,12 +1,12 @@
-export default function Character({ name, imageUrl, id }) {
+export default function Character({ name, imageUrl, id, onclick }) {
 
   return (
-    <li className="card" id={id}>
-      <p>{name}</p>
-      <img
-        src={imageUrl}
-        alt={name}
-      />
-    </li>
+    <button className="card" id={id} onClick={onclick}>
+        <p>{name}</p>
+        <img
+          src={imageUrl}
+          alt={name}
+        />
+    </button>
   )
 }

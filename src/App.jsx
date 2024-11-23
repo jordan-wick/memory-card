@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import CharactersList from './components/CharactersList';
 import useCharacters from './components/GetCharacter';
+import { useEffect } from 'react';
 
 function App() {
   const [difficulty, setDifficulty] = useState('6');
@@ -14,28 +15,41 @@ function App() {
 
 
 
+
+
+
+
+  function handleCardClick(e) {
+    if (loading) return;
+    const card = e.target.id;
+    if (selectedCards.has(card)) {
+      setScore(0);
+      // Bring up game over screen (return)
+    } else {
+      setScore(score + 1);
+      setSelectedCards(selectedCards.add(card));
+      setLoading(true);
+      shuffleCharacters();
+      setLoading(false);
+    }
+  }
+
   const initializeCharacters = async (amount) => {
+    console.log('Initializing...');
     setLoading(true);
     const randomCharacters = await getRandomCharacters(amount);
     setCharacters(randomCharacters);
     setCharactersRendered(true);
-  }
-  if (charactersRendered === false) initializeCharacters(difficulty);
-
-  function handleCardClick(e) {
-    const selectedCard = e.target.id;
-    if (selectedCards.has(selectedCard)) {
-      setScore(0);
-    } else {
-      setScore(score + 1);
-      selectedCards.add(selectedCard);
-    }
-
+    setLoading(false);
   }
 
+  if (!charactersRendered) {
+    initializeCharacters(difficulty);
+  }
 
   return (
     <>
+      <p className="score">{score}</p>
       <form className="settings">
         <select
           type="text"

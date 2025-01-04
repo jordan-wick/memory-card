@@ -43,9 +43,11 @@ function App() {
     setLoading(false);
   }
 
-  if (!charactersRendered) {
-    initializeCharacters(difficulty);
-  }
+  useEffect(() => {
+    if (!charactersRendered) {
+      initializeCharacters(difficulty);
+    }
+  }, [difficulty, charactersRendered])
 
   return (
     <>

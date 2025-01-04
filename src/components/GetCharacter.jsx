@@ -2,16 +2,17 @@ import { useState } from "react";
 
 export default function useCharacters() {
   const [characters, setCharacters] = useState([]);
-  const POSSIBLE_CHARACTERS = 7438;
+  const POSSIBLE_CHARACTERS = 1025;
 
   const getCharacter = async ({ id }) => {
     console.log('Calling API...')
-    const response = await fetch(`https://api.disneyapi.dev/character/${id}`, {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
       mode: 'cors',
     });
-    const result = await response.json();
-    const { name, imageUrl } = result.data;
-    return { name, imageUrl, id };
+    const data = await response.json();
+    const { name, sprites } = data;
+    const sprite = sprites.front_default;
+    return { name, sprite, id };
   }
 
   const getRandomCharacters = async (amount) => {

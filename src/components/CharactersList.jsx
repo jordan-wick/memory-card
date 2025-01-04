@@ -8,7 +8,7 @@ export default function CharactersList({ characters, handleClick }) {
           <Character
             key={character.id}
             name={character.name}
-            imageUrl={character.imageUrl}
+            imageUrl={character.sprite}
             id={character.id}
             onClick={handleClick}
           />

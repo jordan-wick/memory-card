@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import CharactersList from './components/CharactersList';
 import useCharacters from './components/GetCharacter';
-import { useEffect } from 'react';
+import Modal from './components/Modal';
 
 function App() {
   const [difficulty, setDifficulty] = useState('6');
@@ -10,14 +10,9 @@ function App() {
   const [charactersRendered, setCharactersRendered] = useState(false);
   const [selectedCards, setSelectedCards] = useState(new Set());
   const [score, setScore] = useState(0);
+  const [modalOpen, setModalOpen] = useState(true);
 
   const { characters, setCharacters, getRandomCharacters, shuffleCharacters } = useCharacters();
-
-
-
-
-
-
 
   function handleCardClick(e) {
     if (loading) return;
@@ -34,6 +29,14 @@ function App() {
     }
   }
 
+  const handleClose = () => {
+    setModalOpen(false);
+  }
+
+  // const handleOpen = () => {
+  //   setModalOpen(true);
+  // }
+
   const initializeCharacters = async (amount) => {
     console.log('Initializing...');
     setLoading(true);
@@ -43,14 +46,19 @@ function App() {
     setLoading(false);
   }
 
-  useEffect(() => {
-    if (!charactersRendered) {
-      initializeCharacters(difficulty);
-    }
-  }, [difficulty, charactersRendered])
+  if (!charactersRendered) {
+    initializeCharacters(difficulty);
+    setCharactersRendered(true);
+  }
 
   return (
     <>
+      <Modal
+        isOpen={modalOpen}
+        onClose={handleClose}
+      >
+        
+      </Modal>
       <p className="score">{score}</p>
       <form className="settings">
         <select

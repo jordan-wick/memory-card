@@ -1,7 +1,7 @@
-export default function Character({ name, imageUrl, id, onclick }) {
+export default function Character({ name, imageUrl, id, handleClick }) {
 
   return (
-    <button className="card" id={id} onClick={onclick}>
+    <button className="card" id={id} onClick={handleClick}>
         <p>{name}</p>
         <img
           src={imageUrl}

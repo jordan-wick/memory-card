@@ -1,25 +1,27 @@
 import { useState } from 'react'
+import { useEffect } from 'react';
 import './App.css'
 import CharactersList from './components/CharactersList';
 import useCharacters from './components/GetCharacter';
 import Modal from './components/Modal';
+import Loader from './components/Loader';
 
 function App() {
   const [difficulty, setDifficulty] = useState('6');
   const [loading, setLoading] = useState(false);
-  const [charactersRendered, setCharactersRendered] = useState(false);
   const [selectedCards, setSelectedCards] = useState(new Set());
   const [score, setScore] = useState(0);
   const [modalOpen, setModalOpen] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
 
   const { characters, setCharacters, getRandomCharacters, shuffleCharacters } = useCharacters();
 
-  function handleCardClick(e) {
-    if (loading) return;
+  const handleCardClick = (e) => {
+    console.log(e.target.closest('button').className);
+    if (e.target.closest('button').className !== 'card') return;
     const card = e.target.id;
     if (selectedCards.has(card)) {
-      setScore(0);
-      // Bring up game over screen (return)
+      endGame();
     } else {
       setScore(score + 1);
       setSelectedCards(selectedCards.add(card));
@@ -29,38 +31,51 @@ function App() {
     }
   }
 
+  const endGame = () => {
+    setScore(0);
+    setSelectedCards(new Set());
+    setGameOver(true);
+    setModalOpen(true);
+  }
+
+
   const handleClose = () => {
     setModalOpen(false);
   }
+
+  useEffect(() => {
+    const loader = document.querySelector('.loader');
+    if (loading) {
+      loader.style.display = 'block';
+    } else loader.style.display = 'none';
+  }, [loading]);
 
   // const handleOpen = () => {
   //   setModalOpen(true);
   // }
 
-  const initializeCharacters = async (amount) => {
+  const startGame = async (e) => {
+    e.preventDefault();
     console.log('Initializing...');
+    setModalOpen(false);
     setLoading(true);
-    const randomCharacters = await getRandomCharacters(amount);
+    const randomCharacters = await getRandomCharacters(difficulty);
     setCharacters(randomCharacters);
-    setCharactersRendered(true);
     setLoading(false);
-  }
-
-  if (!charactersRendered) {
-    initializeCharacters(difficulty);
-    setCharactersRendered(true);
+    console.log('Retrieved characters');
   }
 
   return (
     <>
+      <Loader />
       <Modal
         isOpen={modalOpen}
         onClose={handleClose}
+        gameOver={gameOver}
       >
-        
-      </Modal>
-      <p className="score">{score}</p>
-      <form className="settings">
+        <form
+          className="settings"
+        >
         <select
           type="text"
           name="difficulty"
@@ -71,7 +86,11 @@ function App() {
           <option value="10">Medium</option>
           <option value="14">Hard</option>
         </select>
+        <button onClick={startGame}>Go!</button>
       </form>
+      </Modal>
+      <p className="score">{score}</p>
+
       <CharactersList characters={characters} handleClick={handleCardClick} />
     </>
   )

@@ -1,26 +1,32 @@
-export default function Modal({ isOpen, onClose, children }) {
+export default function Modal({ isOpen, onClose, children, gameOver }) {
   if (!isOpen) return null;
 
-  return (
+  if (!gameOver) return (
     <div
-      onClick={onClose}
-      className="modal-background"
-      style={{
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      className="modal-foreground"
     >
+      <h2>Pokémemory</h2>
+      <p>Select difficulty...</p>
+      {children}
       <div
-        className="modal-foreground"
+        onClick={onClose}
+        className="modal-background"
       >
-        {children}
+      </div>
+    </div>
+  )
+
+  else return (
+    <div
+      className="modal-foreground"
+    >
+      <h2>Game Over!</h2>
+      <p>Play again?</p>
+      {children}
+      <div
+        onClick={onClose}
+        className="modal-background"
+      >
       </div>
     </div>
   )
